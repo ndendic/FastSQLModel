@@ -1,17 +1,17 @@
-# [project]
-# name = "fastsqlmodel"
-# version = "0.1.0"
-# description = "Simplicity of FastHTML with SQLModel and Alembic"
-# readme = "README.md"
-# authors = [
-#     { name = "Nikola Dendic", email = "ndendic@gmail.com" }
-# ]
-# requires-python = ">=3.12"
-# dependencies = [
-#     "alembic>=1.14.0",
-#     "setuptools>=75.6.0",
-#     "sqlmodel>=0.0.22",
-# ]
+[project]
+name = "fastsqlmodel"
+version = "0.1.0"
+description = "Simplicity of FastHTML with SQLModel and Alembic"
+readme = "README.md"
+authors = [
+    { name = "Nikola Dendic", email = "ndendic@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.14.0",
+    "setuptools>=75.6.0",
+    "sqlmodel>=0.0.22",
+]
 
 [build-system]
 requires = ["setuptools>=64.0"]
