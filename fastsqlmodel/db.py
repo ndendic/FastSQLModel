@@ -5,7 +5,7 @@
 # %% auto 0
 __all__ = ['DatabaseService', 'utc_now', 'SQLModelDB', 'json_serializer', 'BaseTable']
 
-# %% ../nbs/00_database.ipynb 3
+# %% ../nbs/00_database.ipynb 4
 from abc import ABC, abstractmethod
 from typing import Generator, Any, Dict, List, Optional, Type
 from datetime import datetime, timezone
@@ -29,7 +29,7 @@ from pydantic_core import PydanticUndefined
 from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
 
-# %% ../nbs/00_database.ipynb 5
+# %% ../nbs/00_database.ipynb 6
 class DatabaseService(ABC):
     @abstractmethod
     def init_db(self) -> None:
@@ -98,7 +98,7 @@ class DatabaseService(ABC):
         pass
 
 
-# %% ../nbs/00_database.ipynb 6
+# %% ../nbs/00_database.ipynb 7
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -285,7 +285,7 @@ class SQLModelDB(DatabaseService):
             return session.exec(select(func.count()).select_from(model)).one()
 
 
-# %% ../nbs/00_database.ipynb 8
+# %% ../nbs/00_database.ipynb 9
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 

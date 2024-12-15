@@ -12,7 +12,11 @@ dependencies = [
     "alembic>=1.14.0",
     "setuptools>=75.6.0",
     "sqlmodel>=0.0.22",
+    "typer[all]>=0.15.1",
 ]
+
+[project.scripts]
+fsm = "fastsqlmodel.cli:app"
 
 [build-system]
 requires = ["hatchling"]
