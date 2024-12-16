@@ -1,6 +1,6 @@
 from fastsqlmodel.db import BaseTable
 
-class Test(BaseTable):
+class Test(BaseTable, table=True):
     name: str
     description: str
 
