@@ -116,6 +116,11 @@ class DatabaseService(ABC):
 
 
 # %% ../nbs/00_database.ipynb 7
+from typing import Optional, List, Any, Dict, Type, Union, get_args, get_origin
+from datetime import datetime, date
+from uuid import UUID
+from decimal import Decimal
+
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -177,13 +182,53 @@ class SQLModelDB(DatabaseService):
 
             # Add filters for each kwarg
             for field, value in kwargs.items():
-                if exact_match:
-                    query = query.filter(getattr(model, field) == value)
+                if value is None:
+                    query = query.filter(getattr(model, field).is_(None))
+                    continue
+
+                field_type = model.__fields__[field].annotation
+                # Get the underlying type if it's Optional
+                if get_origin(field_type) is Union:
+                    # Optional[T] is actually Union[T, None]
+                    field_type = next((t for t in get_args(field_type) if t is not type(None)), str)
+
+                if not exact_match and isinstance(value, str):
+                    query = query.filter(getattr(model, field).ilike(f"%{value}%"))
                 else:
-                    field_type = model.__fields__[field].annotation
-                    if field_type is str and isinstance(value, str):
-                        query = query.filter(getattr(model, field).ilike(f"%{value}%"))
+                    # Handle different field types
+                    if field_type in (str, Optional[str]):
+                        if exact_match:
+                            query = query.filter(getattr(model, field) == value)
+                        else:
+                            query = query.filter(getattr(model, field).ilike(f"%{value}%"))
+                    
+                    elif field_type in (int, float, Decimal, bool, Optional[int], Optional[float], Optional[Decimal], Optional[bool]):
+                        query = query.filter(getattr(model, field) == value)
+                    
+                    elif field_type in (datetime, date, Optional[datetime], Optional[date]):
+                        # Handle date/datetime range queries
+                        if isinstance(value, (list, tuple)) and len(value) == 2:
+                            start, end = value
+                            query = query.filter(
+                                getattr(model, field).between(start, end)
+                            )
+                        else:
+                            query = query.filter(getattr(model, field) == value)
+                    elif field_type is UUID:
+                        # Handle UUID fields, converting string to UUID if needed
+                        if isinstance(value, str):
+                            try:
+                                value = UUID(value)
+                            except ValueError:
+                                raise ValueError(f"Invalid UUID format for field {field}: {value}")
+                        query = query.filter(getattr(model, field) == value)
+                    
+                    elif isinstance(value, (list, tuple)):
+                        # Handle IN queries for lists
+                        query = query.filter(getattr(model, field).in_(value))
+                    
                     else:
+                        # Default to exact match for unknown types
                         query = query.filter(getattr(model, field) == value)
 
             # Add sorting
@@ -465,7 +510,7 @@ class BaseTable(SQLModel):
         offset: Optional[int] = None,
         as_dict: bool = False,
         fields: Optional[List[str]] = None,
-        exact_match: bool = True,
+        exact_match: bool = True,  # This parameter is correctly defined here
         **kwargs
     ) -> List[Dict[str, Any]]:
         return db.filter(
@@ -476,7 +521,7 @@ class BaseTable(SQLModel):
             offset=offset,
             as_dict=as_dict,
             fields=fields,
-            exact_match=exact_match,
+            exact_match=exact_match,  # But it needs to be explicitly passed here
             **kwargs
         )
 
@@ -531,7 +576,7 @@ class BaseTable(SQLModel):
     def inserted(self) -> Optional["BaseTable"]:
         if db.get_record(type(self), self.id):
             return True
-        return
+        return False
 
     def save(self) -> "BaseTable":
         return db.upsert_record(self.__class__, self.dict())
