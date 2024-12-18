@@ -28,6 +28,8 @@ from pydantic.json import pydantic_encoder
 from pydantic_core import PydanticUndefined
 from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
+from fastcore.basics import patch
+
 
 # %% ../nbs/00_database.ipynb 5
 class DatabaseService(ABC):
@@ -48,7 +50,22 @@ class DatabaseService(ABC):
         pass
 
     @abstractmethod
-    def query_records(
+    def filter(
+        self,
+        model: Type[SQLModel],
+        sorting_field: Optional[str] = None,
+        sort_direction: str = "asc",
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        as_dict: bool = False,
+        fields: Optional[List[str]] = None,
+        exact_match: bool = True,  
+        **kwargs
+    ) -> List[Dict[str, Any]]:
+        pass
+
+    @abstractmethod
+    def search(
         self,
         model: Type[SQLModel],
         search_value: Optional[str] = None,
@@ -103,8 +120,8 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 class SQLModelDB(DatabaseService):
-    def __init__(self, url: str):
-        self.engine = create_engine(url, echo=True)
+    def __init__(self, url: str, echo: bool = False):
+        self.engine = create_engine(url, echo=echo)
 
 
     def init_db(self) -> None:
@@ -134,8 +151,71 @@ class SQLModelDB(DatabaseService):
             results = session.exec(statement).all()
             return results
 
+    def filter(
+        self,
+        model: Type[SQLModel],
+        sorting_field: Optional[str] = None,
+        sort_direction: str = "asc",
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        as_dict: bool = False,
+        fields: Optional[List[str]] = None,
+        exact_match: bool = True,
+        **kwargs
+    ) -> List[Dict[str, Any]]:
+        with Session(self.engine) as session:
+            # Validate that all filter fields exist in the model
+            invalid_fields = [field for field in kwargs.keys() if field not in model.__fields__]
+            if invalid_fields:
+                raise ValueError(f"Invalid fields for filtering: {', '.join(invalid_fields)}")
 
-    def query_records(
+            # Build the base query
+            if fields:
+                query = select(*[getattr(model, field) for field in fields])
+            else:
+                query = select(model)
+
+            # Add filters for each kwarg
+            for field, value in kwargs.items():
+                if exact_match:
+                    query = query.filter(getattr(model, field) == value)
+                else:
+                    field_type = model.__fields__[field].annotation
+                    if field_type is str and isinstance(value, str):
+                        query = query.filter(getattr(model, field).ilike(f"%{value}%"))
+                    else:
+                        query = query.filter(getattr(model, field) == value)
+
+            # Add sorting
+            if sorting_field:
+                if sorting_field in model.__fields__:
+                    order_field = getattr(model, sorting_field)
+                    query = query.order_by(
+                        order_field.desc()
+                        if sort_direction.lower() == "desc"
+                        else order_field
+                    )
+                else:
+                    raise ValueError(
+                        f"Sorting field '{sorting_field}' does not exist in the model."
+                    )
+            else:
+                query = query.order_by(model.id)
+
+            # Add pagination
+            if limit is not None:
+                query = query.limit(limit)
+
+            if offset is not None:
+                query = query.offset(offset)
+
+            results = session.exec(query).all()
+
+            if as_dict:
+                return [result.dict() for result in results]
+            return results
+
+    def search(
         self,
         model: Type[SQLModel],
         search_value: Optional[str] = None,
@@ -356,7 +436,7 @@ class BaseTable(SQLModel):
         return len(db.all_records(cls))
 
     @classmethod
-    def query(
+    def search(
         cls,
         search_value: Optional[str] = None,
         sorting_field: Optional[str] = None,
@@ -366,7 +446,7 @@ class BaseTable(SQLModel):
         as_dict: bool = False,
         fields: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
-        return db.query_records(
+        return db.search(
             cls,
             search_value=search_value,
             sorting_field=sorting_field,
@@ -375,6 +455,29 @@ class BaseTable(SQLModel):
             offset=offset,
             as_dict=as_dict,
             fields=fields,
+        )
+
+    @classmethod
+    def filter(cls,
+        sorting_field: Optional[str] = None,
+        sort_direction: str = "asc",
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        as_dict: bool = False,
+        fields: Optional[List[str]] = None,
+        exact_match: bool = True,
+        **kwargs
+    ) -> List[Dict[str, Any]]:
+        return db.filter(
+            model=cls,
+            sorting_field=sorting_field,
+            sort_direction=sort_direction,
+            limit=limit,
+            offset=offset,
+            as_dict=as_dict,
+            fields=fields,
+            exact_match=exact_match,
+            **kwargs
         )
 
     @classmethod
@@ -394,7 +497,7 @@ class BaseTable(SQLModel):
 
         offset = (page - 1) * per_page
 
-        records = cls.query(
+        records = cls.search(
             search_value=search_value,
             sorting_field=cls.default_sort_field,
             sort_direction="asc",
@@ -433,8 +536,14 @@ class BaseTable(SQLModel):
     def save(self) -> "BaseTable":
         return db.upsert_record(self.__class__, self.dict())
 
+    def delete(self) -> None:
+        db.delete_record(self.__class__, self.id)
+
     def dict(self, *args, **kwargs):
-        return self._dict_with_custom_encoder(set(), *args, **kwargs)
+        if database_url.startswith("sqlite"):
+            return self.model_dump()
+        else:
+            return self._dict_with_custom_encoder(set(), *args, **kwargs)
 
     def _dict_with_custom_encoder(self, processed: Set[int], *args, **kwargs):
         if id(self) in processed:
