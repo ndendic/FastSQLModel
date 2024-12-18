@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-fsm = "fastsqlmodel.cli:app"
+fastmodel = "fastsqlmodel.cli:app"
 
 [build-system]
 requires = ["hatchling"]

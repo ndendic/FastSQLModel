@@ -1,12 +1,14 @@
 # A generic, single database configuration.
 
 [alembic]
-# path to migration scripts.
+# path to migration scripts
 # Use forward slashes (/) also on windows to provide an os agnostic path
-script_location = ${script_location}
+script_location = migrations
 
 # template used to generate migration file names; The default value is %%(rev)s_%%(slug)s
 # Uncomment the line below if you want the files to be prepended with date and time
+# see https://alembic.sqlalchemy.org/en/latest/tutorial.html#editing-the-ini-file
+# for all available tokens
 # file_template = %%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s
 
 # sys.path path, will be prepended to sys.path if present.
@@ -34,10 +36,10 @@ prepend_sys_path = .
 # sourceless = false
 
 # version location specification; This defaults
-# to ${script_location}/versions.  When using multiple version
+# to migrations/versions.  When using multiple version
 # directories, initial revisions must be specified with --version-path.
 # The path separator used here should be the separator specified by "version_path_separator" below.
-# version_locations = %(here)s/bar:%(here)s/bat:${script_location}/versions
+# version_locations = %(here)s/bar:%(here)s/bat:migrations/versions
 
 # version path separator; As mentioned above, this is the character used to split
 # version_locations. The default within new alembic.ini files is "os", which uses os.pathsep.
@@ -90,12 +92,12 @@ keys = console
 keys = generic
 
 [logger_root]
-level = WARNING
+level = WARN
 handlers = console
 qualname =
 
 [logger_sqlalchemy]
-level = WARNING
+level = WARN
 handlers =
 qualname = sqlalchemy.engine
 

@@ -1,20 +1,21 @@
+import os
 from logging.config import fileConfig
 
 from alembic import context
-from decouple import config as conf
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
+from fastsqlmodel.db import BaseTable
 
-from modules.shared.models import BaseTable
-import pkgutil
-import importlib
-from pathlib import Path
+# Make sure all tables are imported
 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", conf("DATABASE_URL"))
+# config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
+config.set_main_option("sqlalchemy.url", "sqlite:///test.db")
+
+print("DATABASE_URL", os.getenv("DATABASE_URL"))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
