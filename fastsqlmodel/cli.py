@@ -15,7 +15,7 @@ from pathlib import Path
 from mako.template import Template
 
 # %% ../nbs/01_cli.ipynb 5
-app = typer.Typer(name="FastSQLModel CLI")
+app = typer.Typer(name="FastSQLModel")
 
 # %% ../nbs/01_cli.ipynb 7
 def process_templates(template_dir: Path, target_dir: Path, script_location: str):
@@ -144,6 +144,9 @@ def migrate(
 
 
 # %% ../nbs/01_cli.ipynb 14
+from IPython import get_ipython
+import sys
+
 def in_notebook():
     """Check if the code is running in a Jupyter notebook"""
     try:
@@ -156,7 +159,7 @@ def in_notebook():
             return False
     except NameError:  # Probably standard Python interpreter
         return False
-        
-if __name__ == "__main__":
-    if not in_notebook():
-        app()
+
+# Only run the CLI if this is being run as a script and not during import
+if __name__ == "__main__" and not in_notebook() and sys.argv[0].endswith('cli.py'):
+    app(prog_name="FastSQLModel")

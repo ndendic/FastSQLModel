@@ -182,13 +182,13 @@ Making migrations
 ```
 
     Generating Alembic migration with message: Pushing changes
-    DATABASE_URL None
+    DATABASE_URL sqlite:///test.db
     INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
     INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-    INFO  [alembic.autogenerate.compare] Detected added table 'user'
-      Generating /home/ndendic/WebDev/FastSQLModel/nbs/migrations/versions/da869a76b
-      be1_pushing_changes.py ...  done
-    Migration created successfully!
+    ERROR [alembic.util.messaging] Can't locate revision identified by '5289002d24df'
+      FAILED: Can't locate revision identified by '5289002d24df'
+    Error running Alembic: Command '['alembic', 'revision', '--autogenerate', '-m', 
+    'Pushing changes']' returned non-zero exit status 255.
 
 Migrating changes
 
@@ -197,11 +197,13 @@ Migrating changes
 ```
 
     Applying database migrations...
-    DATABASE_URL None
+    DATABASE_URL sqlite:///test.db
     INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
     INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-    INFO  [alembic.runtime.migration] Running upgrade  -> da869a76bbe1, Pushing changes
-    Migrations applied successfully!
+    ERROR [alembic.util.messaging] Can't locate revision identified by '5289002d24df'
+      FAILED: Can't locate revision identified by '5289002d24df'
+    Error applying migrations: Command '['alembic', 'upgrade', 'head']' returned 
+    non-zero exit status 255.
 
 Once our table is migrated, we can start adding some data like this.
 
@@ -214,28 +216,34 @@ user.model_dump()
     {'name': 'Homer Simpson',
      'email': 'homer@simpson.com',
      'password': 'password',
-     'joined_at': datetime.datetime(2024, 12, 18, 20, 1, 19, 890847),
-     'id': UUID('7340e8c0-220e-463b-a2d2-2c9260e1ba04'),
-     'created_at': datetime.datetime(2024, 12, 18, 19, 1, 19, 892063, tzinfo=datetime.timezone.utc),
-     'updated_at': datetime.datetime(2024, 12, 18, 19, 1, 19, 892080, tzinfo=datetime.timezone.utc)}
+     'joined_at': datetime.datetime(2024, 12, 19, 13, 37, 22, 340771),
+     'id': UUID('8ae7ed20-8579-47ee-830f-121a0dac4762'),
+     'created_at': datetime.datetime(2024, 12, 19, 12, 37, 22, 343167, tzinfo=datetime.timezone.utc),
+     'updated_at': datetime.datetime(2024, 12, 19, 12, 37, 22, 343208, tzinfo=datetime.timezone.utc)}
 
 Let’s get our user by id
 
 ``` python
-homer = User.get("7340e8c0-220e-463b-a2d2-2c9260e1ba04")
-homer.name, homer.email
+homer = User.get(user.id)
+if homer:
+    print(f"Name: {homer.name}, Email: {homer.email}")
+else:
+    print("User not found")
 ```
 
-    ('Homer Simpson', 'homer@simpson.com')
+    Name: Homer Simpson, Email: homer@simpson.com
 
 Or by alternative key value
 
 ``` python
 homer = User.get("homer@simpson.com",alt_key="email")
-homer.name
+if homer:
+    print(f"Name: {homer.name}, Email: {homer.email}")
+else:
+    print("User not found")
 ```
 
-    'Homer Simpson'
+    Name: Homer Simpson, Email: homer@simpson.com
 
 Now let’s modify our record and save it back to our database and
 retreive back
@@ -271,10 +279,13 @@ Let’s retrive records in our table. We can simply do that by calling
 User.all()
 ```
 
-    [User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 18, 41, 47, 331825), updated_at=datetime.datetime(2024, 12, 18, 19, 3, 27, 396310), created_at=datetime.datetime(2024, 12, 18, 17, 41, 47, 342560), id=UUID('98812d62-4346-4f33-a978-39e64aec717c'), password='password'),
-     User(name='Bart Simpson', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 18, 43, 31, 204497), updated_at=datetime.datetime(2024, 12, 18, 17, 43, 31, 206328), created_at=datetime.datetime(2024, 12, 18, 17, 43, 31, 206323), id=UUID('d072196c-8b25-4439-930b-7080b976bdfb'), password='password'),
-     User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 20, 1, 4, 484101), updated_at=datetime.datetime(2024, 12, 18, 19, 1, 49, 450862), created_at=datetime.datetime(2024, 12, 18, 19, 1, 4, 486243), id=UUID('dcf7fb0d-5e93-4874-8d41-f66d7a062cd6'), password='password'),
-     User(name='Homer Simpson', email='homer@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 20, 1, 19, 890847), updated_at=datetime.datetime(2024, 12, 18, 19, 1, 19, 893214), created_at=datetime.datetime(2024, 12, 18, 19, 1, 19, 893206), id=UUID('7340e8c0-220e-463b-a2d2-2c9260e1ba04'), password='password')]
+    [User(created_at=datetime.datetime(2024, 12, 18, 13, 46, 56, 424225), updated_at=datetime.datetime(2024, 12, 18, 13, 46, 56, 424237), id=UUID('420cc98d-9932-459d-b0e6-4a2f78ae8446'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 14, 46, 56, 412409)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 34, 34, 910466), updated_at=datetime.datetime(2024, 12, 19, 12, 34, 34, 910474), id=UUID('a1537834-22b9-4c1b-94a0-4d68f82ae3ed'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 34, 34, 909023)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 35, 10, 261956), updated_at=datetime.datetime(2024, 12, 19, 12, 35, 10, 261966), id=UUID('8699c000-4bc7-47a8-b68a-982aaad8e380'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 35, 10, 260092)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 35, 42, 792670), updated_at=datetime.datetime(2024, 12, 19, 12, 35, 42, 792700), id=UUID('3f686d36-65d5-48fa-b4ef-efa20c552d99'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 35, 42, 790064)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 36, 2, 538502), updated_at=datetime.datetime(2024, 12, 19, 12, 36, 2, 538548), id=UUID('a4ac7f2e-8f9e-4882-b0fd-796419f9862a'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 36, 2, 535652)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 346125), updated_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 417729), id=UUID('8ae7ed20-8579-47ee-830f-121a0dac4762'), name='Homer Simpson', password='password', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 37, 22, 340771)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 453142), updated_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 453152), id=UUID('2f30794b-12bf-4c15-acb8-f673c329db40'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 37, 22, 450919))]
 
 Here we can see that we have forgot to set some `unique` values to our
 fields and prevent duplicates. So let’s remove our duplicates manualy
@@ -290,9 +301,7 @@ for user in users:
     print(f"Name: {user.name} , Email: {user.email}, ID: {user.id}")
 ```
 
-    Name: Homer Simpson , Email: homer@simpson.com, ID: 7340e8c0-220e-463b-a2d2-2c9260e1ba04
-    Name: Homer Simpson , Email: homer.simpson@simpson.com, ID: 98812d62-4346-4f33-a978-39e64aec717c
-    Name: Homer Simpson , Email: homer.simpson@simpson.com, ID: dcf7fb0d-5e93-4874-8d41-f66d7a062cd6
+    Name: Homer Simpson , Email: homer.simpson@simpson.com, ID: 8ae7ed20-8579-47ee-830f-121a0dac4762
 
 You can also set the fields you want to retreive from specific fields
 using `fields` argument. This will now not return the instance of the
@@ -303,24 +312,32 @@ users = User.search(search_value="Simpson", fields=['name','email'])
 users
 ```
 
-    [('Homer Simpson', 'homer.simpson@simpson.com'),
+    [('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Homer Simpson', 'homer.simpson@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
      ('Bart Simpson', 'bart@simpson.com')]
 
 Now let’s retreive our records again
 
 ``` python
-users = User.search(search_value="homer")
+users = User.search(search_value="bart")
 users
 ```
 
-    [User(name='Homer Simpson', email='homer@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 20, 1, 19, 890847), updated_at=datetime.datetime(2024, 12, 18, 19, 1, 19, 893214), created_at=datetime.datetime(2024, 12, 18, 19, 1, 19, 893206), id=UUID('7340e8c0-220e-463b-a2d2-2c9260e1ba04'), password='password'),
-     User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 18, 41, 47, 331825), updated_at=datetime.datetime(2024, 12, 18, 19, 3, 27, 396310), created_at=datetime.datetime(2024, 12, 18, 17, 41, 47, 342560), id=UUID('98812d62-4346-4f33-a978-39e64aec717c'), password='password'),
-     User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 20, 1, 4, 484101), updated_at=datetime.datetime(2024, 12, 18, 19, 1, 49, 450862), created_at=datetime.datetime(2024, 12, 18, 19, 1, 4, 486243), id=UUID('dcf7fb0d-5e93-4874-8d41-f66d7a062cd6'), password='password')]
+    [User(created_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 453142), updated_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 453152), id=UUID('2f30794b-12bf-4c15-acb8-f673c329db40'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 37, 22, 450919)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 35, 42, 792670), updated_at=datetime.datetime(2024, 12, 19, 12, 35, 42, 792700), id=UUID('3f686d36-65d5-48fa-b4ef-efa20c552d99'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 35, 42, 790064)),
+     User(created_at=datetime.datetime(2024, 12, 18, 13, 46, 56, 424225), updated_at=datetime.datetime(2024, 12, 18, 13, 46, 56, 424237), id=UUID('420cc98d-9932-459d-b0e6-4a2f78ae8446'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 18, 14, 46, 56, 412409)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 35, 10, 261956), updated_at=datetime.datetime(2024, 12, 19, 12, 35, 10, 261966), id=UUID('8699c000-4bc7-47a8-b68a-982aaad8e380'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 35, 10, 260092)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 34, 34, 910466), updated_at=datetime.datetime(2024, 12, 19, 12, 34, 34, 910474), id=UUID('a1537834-22b9-4c1b-94a0-4d68f82ae3ed'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 34, 34, 909023)),
+     User(created_at=datetime.datetime(2024, 12, 19, 12, 36, 2, 538502), updated_at=datetime.datetime(2024, 12, 19, 12, 36, 2, 538548), id=UUID('a4ac7f2e-8f9e-4882-b0fd-796419f9862a'), name='Bart Simpson', password='password', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 36, 2, 535652))]
 
 ..and remove the first two results using the `delete` function
 
 ``` python
-for user in users[:2]:
+for user in users[:len(users)-1]:
     user.delete()
 
 for user in User.all():
@@ -335,23 +352,17 @@ for a specific model field.
 
 ``` python
 results = User.filter(name="Homer Simpson")
-results[0].model_dump()
+results
 ```
 
-    {'created_at': datetime.datetime(2024, 12, 18, 17, 41, 47, 342560),
-     'id': UUID('98812d62-4346-4f33-a978-39e64aec717c'),
-     'updated_at': datetime.datetime(2024, 12, 18, 17, 42, 24, 336033),
-     'password': 'password',
-     'name': 'Homer Simpson',
-     'email': 'homer.simpson@simpson.com',
-     'joined_at': datetime.datetime(2024, 12, 18, 18, 41, 47, 331825)}
+    [User(created_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 346125), updated_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 417729), id=UUID('8ae7ed20-8579-47ee-830f-121a0dac4762'), name='Homer Simpson', password='password', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 37, 22, 340771))]
 
 ``` python
 results = User.filter(email="homer.simpson@simpson.com")
-results[0].name
+results
 ```
 
-    'Homer Simpson'
+    [User(created_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 346125), updated_at=datetime.datetime(2024, 12, 19, 12, 37, 22, 417729), id=UUID('8ae7ed20-8579-47ee-830f-121a0dac4762'), name='Homer Simpson', password='password', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 13, 37, 22, 340771))]
 
 Similar to `search`, `filter` can take the same argumants, like
 `fields`, `sorting_field` and other (for full list navigate to the db
@@ -362,7 +373,12 @@ results = User.filter(name="simp",exact_match=False,fields=["name","email"])
 results
 ```
 
-    [('Homer Simpson', 'homer.simpson@simpson.com'),
+    [('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
+     ('Homer Simpson', 'homer.simpson@simpson.com'),
+     ('Bart Simpson', 'bart@simpson.com'),
      ('Bart Simpson', 'bart@simpson.com')]
 
 We can also combine field filters.
