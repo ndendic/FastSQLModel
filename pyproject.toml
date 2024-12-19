@@ -1,6 +1,5 @@
 [project]
 name = "FastSQLModel"
-version = "0.1.1"
 description = "Simplie and Fast utility for SQLModel/SQLAlchemy and Alembic"
 readme = "README.md"
 authors = [
@@ -13,6 +12,7 @@ dynamic = [
     "classifiers",
     "entry-points",
     "optional-dependencies",
+    "version",
 ]
 
 dependencies = [
