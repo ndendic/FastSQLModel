@@ -2,7 +2,7 @@
 from typing import Optional
 from sqlmodel import Field
 from datetime import datetime
-from fastsqlmodel.db import BaseTable
+from FastSQLModel.db import BaseTable
 
 class User(BaseTable, table=True):
     name: Optional[str] = Field(nullable=True)

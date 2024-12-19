@@ -4,10 +4,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
-from fastsqlmodel.db import BaseTable
-
-# Make sure all tables are imported
-
+from FastSQLModel.db import BaseTable
+# Make from sure all tables are imported
+from users import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

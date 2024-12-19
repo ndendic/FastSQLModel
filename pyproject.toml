@@ -1,12 +1,19 @@
 [project]
-name = "fastsqlmodel"
-version = "0.1.0"
-description = "Add your description here"
+name = "FastSQLModel"
+version = "0.1.1"
+description = "Simplie and Fast utility for SQLModel/SQLAlchemy and Alembic"
 readme = "README.md"
 authors = [
     { name = "Nikola Dendic", email = "ndendic@gmail.com" }
 ]
 requires-python = ">=3.10"
+license = { text = "Apache Software License 2.0" }
+dynamic = [
+    "keywords",
+    "classifiers",
+    "entry-points",
+    "optional-dependencies",
+]
 
 dependencies = [
     "alembic>=1.14.0",
@@ -16,11 +23,11 @@ dependencies = [
 ]
 
 [project.scripts]
-fastmodel = "fastsqlmodel.cli:app"
+fastmodel = "FastSQLModel.cli:app"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools==68.2.2"]
+build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [

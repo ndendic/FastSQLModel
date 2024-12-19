@@ -28,9 +28,6 @@ from pydantic.json import pydantic_encoder
 from pydantic_core import PydanticUndefined
 from pydantic_core.core_schema import SerializerFunctionWrapHandler
 
-from fastcore.basics import patch
-
-
 # %% ../nbs/00_database.ipynb 5
 class DatabaseService(ABC):
     @abstractmethod

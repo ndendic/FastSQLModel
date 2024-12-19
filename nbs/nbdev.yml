@@ -2,8 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  title: "fastsqlmodel"
-  site-url: "https://ndendic.github.io/fastsqlmodel"
+  title: "FastSQLModel"
+  site-url: "https://ndendic.github.io/FastSQLModel"
   description: "Simplicity of FastHTML with SQLModel and Alembic"
   repo-branch: main
-  repo-url: "https://github.com/ndendic/fastsqlmodel"
+  repo-url: "https://github.com/ndendic/FastSQLModel"
