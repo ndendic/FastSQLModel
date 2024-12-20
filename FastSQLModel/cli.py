@@ -144,7 +144,6 @@ def migrate(
 
 
 # %% ../nbs/01_cli.ipynb 14
-from IPython import get_ipython
 import sys
 
 def in_notebook():
