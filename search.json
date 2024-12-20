@@ -1,0 +1,112 @@
+[
+  {
+    "objectID": "database.html",
+    "href": "database.html",
+    "title": "Database Services",
+    "section": "",
+    "text": "Use this to create a new database service that can be used to interact with the database.\n\n\n\n\n DatabaseService ()\n\nHelper class that provides a standard way to create an ABC using inheritance.",
+    "crumbs": [
+      "Database Services"
+    ]
+  },
+  {
+    "objectID": "database.html#abstract-database-service",
+    "href": "database.html#abstract-database-service",
+    "title": "Database Services",
+    "section": "",
+    "text": "Use this to create a new database service that can be used to interact with the database.\n\n\n\n\n DatabaseService ()\n\nHelper class that provides a standard way to create an ABC using inheritance.",
+    "crumbs": [
+      "Database Services"
+    ]
+  },
+  {
+    "objectID": "database.html#sqlmodelsqlalchemy-database-service",
+    "href": "database.html#sqlmodelsqlalchemy-database-service",
+    "title": "Database Services",
+    "section": "SQLModel/SQLAlchemy Database service",
+    "text": "SQLModel/SQLAlchemy Database service\nImplementation of the DB Service interface for SQLModel/SQLAlchemy\n\n\nSQLModelDB\n\n SQLModelDB (url:str, echo:bool=False)\n\nHelper class that provides a standard way to create an ABC using inheritance.\n\n\n\nutc_now\n\n utc_now ()\n\n\n\n\nget_db_service\n\n get_db_service ()",
+    "crumbs": [
+      "Database Services"
+    ]
+  },
+  {
+    "objectID": "database.html#basetable",
+    "href": "database.html#basetable",
+    "title": "Database Services",
+    "section": "BaseTable",
+    "text": "BaseTable\nBaseTable is a SQLModel that includes the id, created_at, and updated_at fields.\n\n\nBaseTable\n\n BaseTable (id:uuid.UUID=&lt;factory&gt;,\n            created_at:datetime.datetime=&lt;factory&gt;,\n            updated_at:datetime.datetime=&lt;factory&gt;)\n\n*Usage docs: https://docs.pydantic.dev/2.10/concepts/models/\nA base class for creating Pydantic models.\nAttributes: class_vars: The names of the class variables defined on the model. private_attributes: Metadata about the private attributes of the model. signature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_fields__: A dictionary of field names and their corresponding [`FieldInfo`][pydantic.fields.FieldInfo] objects.\n__pydantic_computed_fields__: A dictionary of computed field names and their corresponding [`ComputedFieldInfo`][pydantic.fields.ComputedFieldInfo] objects.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\njson_serializer\n\n json_serializer (value:Any,\n                  _:pydantic_core.core_schema.SerializerFunctionWrapHandle\n                  r)\n\n\n\n\nutc_now\n\n utc_now ()",
+    "crumbs": [
+      "Database Services"
+    ]
+  },
+  {
+    "objectID": "cli.html",
+    "href": "cli.html",
+    "title": "fastmodel cli",
+    "section": "",
+    "text": "Helper function to process templates during initialization\n\n\n\nprocess_templates\n\n process_templates (template_dir:pathlib.Path, target_dir:pathlib.Path,\n                    script_location:str)\n\nProcess and copy template files with proper configuration\n\n\nInitialize Alembic with custom FastSQLModel templates\n\n\n\ninit\n\n init (directory:str=&lt;typer.models.OptionInfo object at 0x7fa5e5620d60&gt;)\n\n*Initialize a new Alembic environment with FastSQLModel templates.\nThis will create: - alembic.ini in the root directory - migrations/ directory with: - env.py - README - script.py.mako - versions/ directory*\n\n\nGenerate new Alembic migration\n\n\n\nmigrations\n\n migrations (message:str=&lt;typer.models.OptionInfo object at\n             0x7fa5e5623c10&gt;, autogenerate:bool=&lt;typer.models.OptionInfo\n             object at 0x7fa5e5623e20&gt;)\n\n*Generate a new Alembic migration file.\nExamples: fsm migrations -m “Add user table” fsm migrations –no-autogenerate -m “Custom migration”*\n\n\nApply pending Alembic migrations\n\n\n\nmigrate\n\n migrate (revision:str=&lt;typer.models.OptionInfo object at 0x7fa5e5623fa0&gt;)\n\n*Apply all pending database migrations.\nExamples: fsm migrate # Upgrade to latest version fsm migrate -r +1 # Upgrade one revision fsm migrate -r -1 # Downgrade one revision fsm migrate -r base # Downgrade all migrations*",
+    "crumbs": [
+      "fastmodel cli"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "FastSQLModel",
+    "section": "",
+    "text": "FastSQLModel is a utility for simplifying the process of using SQLModel/SQLAlchemy and Alembic. It provides a CLI for initializing and managing Alembic migrations, and a set of tools for working with SQLModel and SQLAlchemy models.",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  },
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "FastSQLModel",
+    "section": "",
+    "text": "FastSQLModel is a utility for simplifying the process of using SQLModel/SQLAlchemy and Alembic. It provides a CLI for initializing and managing Alembic migrations, and a set of tools for working with SQLModel and SQLAlchemy models.",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "FastSQLModel",
+    "section": "Features",
+    "text": "Features\n\nCLI for Alembic: FastSQLModel provides a CLI for initializing and managing Alembic migrations.\nSQLModel and SQLAlchemy Models: FastSQLModel provides a set of tools for working with SQLModel and SQLAlchemy models.\nDatabase Management: FastSQLModel provides a set of tools for managing the database, including creating, dropping, and querying the database.",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "FastSQLModel",
+    "section": "Developer Guide",
+    "text": "Developer Guide\n\nInstall FastSQLModel in Development\nIf you want to make changes to the package, you can install it in development mode. This project uses nbdev for development, so you can make changes to the code and documentation in the notebooks under the nbs/ directory. To find out more about amazing nbdev, visit the nbdev documentation.\nTo make changes to the package, you can install it in development mode.\n# make sure FastSQLModel package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to FastSQLModel\n$ nbdev_prepare",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "FastSQLModel",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/ndendic/FastSQLModel.git\nor from conda\n$ conda install -c ndendic FastSQLModel\nor from pypi\n$ pip install FastSQLModel\nTo establish a connection to the database, please specify the DATABASE_URL in the .env file.\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "FastSQLModel",
+    "section": "How to use",
+    "text": "How to use\n\nCreate your first model\nTo create your first model, you can can import the BaseTable class from the FastSQLModel.db module and create a new model by subclassing it. BaseTable is a subclass of SQLModel, so it has all the same features, but it also has a few extra features to help with some standard db operations and 3 extra fields: - id: primary key, default to a uuid4 - created_at: datetime, default to now - updated_at: datetime, default to now, and updated on every save\nclass BaseTable(SQLModel):\n    model_config = ConfigDict(json_encoders={datetime: lambda dt: dt.isoformat()})\n    id: UUID = Field(default_factory=uuid4, primary_key=True)\n    created_at: datetime = Field(\n        default_factory=utc_now,\n        sa_type= sa.DateTime(timezone=True),\n        sa_column_kwargs={\"server_default\": sa.func.now()},\n        nullable=False,\n        title=\"Created At\",\n        schema_extra={\"icon\": \"clock\", \"input_type\": \"datetime\"},\n    )\n    updated_at: datetime = Field(\n        default_factory=utc_now,\n        sa_type=sa.DateTime(timezone=True),\n        sa_column_kwargs={\n            \"server_default\": sa.func.now(),\n            \"server_onupdate\": sa.func.now(),\n        },\n        # onupdate=utc_now,\n        nullable=False,\n        title=\"Updated At\",\n        schema_extra={\"icon\": \"clock\", \"input_type\": \"datetime\"},\n    )\nHere is an example of how to create a new model using BaseTable\n# users.py\nfrom typing import Optional\nfrom sqlmodel import Field\nfrom datetime import datetime\nfrom FastSQLModel.db import BaseTable\n\nclass User(BaseTable, table=True):\n    name: Optional[str] = Field(nullable=True)\n    email: str = Field(nullable=False)\n    password: str = Field(nullable=False)\n    joined_at: datetime = Field(nullable=False)\nNow that you have created your first model, you can use the CLI to initialize and manage Alembic project.\n$ fastmodel init\nThis will create a new Alembic project in the current directory, and create a new .alembic.ini file.\n\nThen make sure to add your models to the migrations/env.py file before running migrations.\n\n# migrations/env.py\nfrom users import User\n# ...\n\nNow you can run migrations to prepare the database for your models.\n\n$ fastmodel migrations\n\nAnd now you can migrate your models to the database.\n\n$ fastmodel migrate\nLet’s see how this works\nInitialization:\n\n!fastmodel init\n\nSuccessfully initialized Alembic in migrations directory!\nPlease make sure to add your models to migrations/env.py file before running \nmigrations!\n\n\nMaking migrations\n\n!fastmodel migrations\n\nGenerating Alembic migration with message: Pushing changes\nDATABASE_URL sqlite:///test.db\nINFO  [alembic.runtime.migration] Context impl SQLiteImpl.\nINFO  [alembic.runtime.migration] Will assume non-transactional DDL.\nINFO  [alembic.autogenerate.compare] Detected added table 'user'\n  Generating /home/ndendic/WebDev/FastSQLModel/nbs/migrations/versions/4d9613e97\n  da3_pushing_changes.py ...  done\nMigration created successfully!\n\n\nMigrating changes\n\n!fastmodel migrate\n\nApplying database migrations...\nDATABASE_URL sqlite:///test.db\nINFO  [alembic.runtime.migration] Context impl SQLiteImpl.\nINFO  [alembic.runtime.migration] Will assume non-transactional DDL.\nINFO  [alembic.runtime.migration] Running upgrade  -&gt; 4d9613e97da3, Pushing changes\nMigrations applied successfully!\n\n\nOnce our table is migrated, we can start adding some data like this.\n\nuser = User(name=\"Homer Simpson\", email=\"homer@simpson.com\", password=\"password\", joined_at=datetime.now())\nuser.save()\nuser.model_dump()\n\n{'name': 'Homer Simpson',\n 'email': 'homer@simpson.com',\n 'password': 'password',\n 'joined_at': datetime.datetime(2024, 12, 19, 16, 41, 37, 575422),\n 'id': UUID('4b3a4311-6103-4694-8954-d6771233bc97'),\n 'created_at': datetime.datetime(2024, 12, 19, 15, 41, 37, 576371, tzinfo=datetime.timezone.utc),\n 'updated_at': datetime.datetime(2024, 12, 19, 15, 41, 37, 576413, tzinfo=datetime.timezone.utc)}\n\n\nLet’s get our user by id\n\nhomer = User.get(user.id)\nif homer:\n    print(f\"Name: {homer.name}, Email: {homer.email}\")\nelse:\n    print(\"User not found\")\n\nName: Homer Simpson, Email: homer@simpson.com\n\n\nOr by alternative key value\n\nhomer = User.get(\"homer@simpson.com\",alt_key=\"email\")\nif homer:\n    print(f\"Name: {homer.name}, Email: {homer.email}\")\nelse:\n    print(\"User not found\")\n\nName: Homer Simpson, Email: homer@simpson.com\n\n\nNow let’s modify our record and save it back to our database and retreive back\n\nhomer.email = \"homer.simpson@simpson.com\"\nhomer.save()\nhomer = User.get(\"homer.simpson@simpson.com\",alt_key=\"email\")\nhomer.email\n\n'homer.simpson@simpson.com'\n\n\nLet’s define a bit more Simprons, this time like this\n\nbart = User()\nbart.name = \"Bart Simpson\"\nbart.email = \"bart@simpson.com\"\nbart.password = \"password\"\nbart.joined_at = datetime.now()\nbart.save()\n\nbart.name, bart.email\n\n('Bart Simpson', 'bart@simpson.com')\n\n\nLet’s retrive records in our table. We can simply do that by calling all function\n\nUser.all()\n\n[User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 32, 766940), id=UUID('fc724993-651f-47ea-a332-e2318e9c09a2'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 32, 784370), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 952971), password='password'),\n User(name='Homer Simpson', email='homer@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 37, 575422), id=UUID('4b3a4311-6103-4694-8954-d6771233bc97'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 589591), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 589608), password='password'),\n User(name='Bart Simpson', email='bart@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 38, 63184), id=UUID('418531a9-c114-4d16-8432-c2d7f899f237'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 38, 66553), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 38, 66583), password='password')]\n\n\nHere we can see that we have forgot to set some unique values to our fields and prevent duplicates. So let’s remove our duplicates manualy now\nFirst, we can use search to get all the records that contain some character in some of their string fields. This is usefull for filtering records where you’re not sure where the value shuld match.\n\nusers = User.search(search_value=\"Homer\")\nfor user in users:\n    print(f\"Name: {user.name} , Email: {user.email}, ID: {user.id}\")\n\nName: Homer Simpson , Email: homer@simpson.com, ID: 4b3a4311-6103-4694-8954-d6771233bc97\nName: Homer Simpson , Email: homer.simpson@simpson.com, ID: fc724993-651f-47ea-a332-e2318e9c09a2\n\n\nYou can also set the fields you want to retreive from specific fields using fields argument. This will now not return the instance of the User rable but a list of tuples.\n\nusers = User.search(search_value=\"Simpson\", fields=['name','email'])\nusers\n\n[('Bart Simpson', 'bart@simpson.com'),\n ('Homer Simpson', 'homer@simpson.com'),\n ('Homer Simpson', 'homer.simpson@simpson.com')]\n\n\nNow let’s retreive our records again\n\nusers = User.search(search_value=\"homer\")\nusers\n\n[User(name='Homer Simpson', email='homer@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 37, 575422), id=UUID('4b3a4311-6103-4694-8954-d6771233bc97'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 589591), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 589608), password='password'),\n User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 32, 766940), id=UUID('fc724993-651f-47ea-a332-e2318e9c09a2'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 32, 784370), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 952971), password='password')]\n\n\n..and remove the first two results using the delete function\n\nfor user in users[:len(users)-1]:\n    user.delete()\n\nfor user in User.all():\n    print(user.name)\n\nHomer Simpson\nBart Simpson\n\n\nwe also have the option to filter the records using filter function for a specific model field.\n\nresults = User.filter(name=\"Homer Simpson\")\nresults\n\n[User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 32, 766940), id=UUID('fc724993-651f-47ea-a332-e2318e9c09a2'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 32, 784370), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 952971), password='password')]\n\n\n\nresults = User.filter(email=\"homer.simpson@simpson.com\")\nresults\n\n[User(name='Homer Simpson', email='homer.simpson@simpson.com', joined_at=datetime.datetime(2024, 12, 19, 16, 41, 32, 766940), id=UUID('fc724993-651f-47ea-a332-e2318e9c09a2'), created_at=datetime.datetime(2024, 12, 19, 15, 41, 32, 784370), updated_at=datetime.datetime(2024, 12, 19, 15, 41, 37, 952971), password='password')]\n\n\nSimilar to search, filter can take the same argumants, like fields, sorting_field and other (for full list navigate to the db section).\n\nresults = User.filter(name=\"Simp\",exact_match=False,fields=[\"name\",\"email\"])\nresults\n\n[('Bart Simpson', 'bart@simpson.com'),\n ('Homer Simpson', 'homer.simpson@simpson.com')]\n\n\nWe can also combine field filters.\n\nresults = User.filter(name=\"simp\",email=\"hom\",exact_match=False,fields=[\"name\",\"email\"])\nresults\n\n[('Homer Simpson', 'homer.simpson@simpson.com')]\n\n\nFor more deatails visit related docs for SQLModel and Alembic",
+    "crumbs": [
+      "FastSQLModel"
+    ]
+  }
+]
